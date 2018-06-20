@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Weather Channel</h1>
+    <h2>Elegí una ciudad para conocer su estado del tiempo:</h2>
+
+    <button name="Buenos Aires">Buenos Aires</button>
+    <button name="Miami">Miami</button>
+    <button name="Edinburgh">Edimburgo</button>
+    <button name="Berlin">Berlin</button>
+
+
+    <div id="container">
+
+    </div>
+
+    <div id="alert">
+
+    </div>
+    
+    <script type="text/javascript">
+    
+    var traerData = function (data) {
+
+            var output = "<ul>"
+            var hora_sunrise = (new Date (data.sys.sunrise * 1000)).getHours();
+            var minutos_sunrise = (new Date (data.sys.sunrise * 1000)).getMinutes();
+            var hora_sunset = (new Date (data.sys.sunset * 1000)).getHours();
+            var minutos_sunset = (new Date (data.sys.sunset * 1000)).getMinutes();
+
+            output += '<li>Temperatura actual: '+data.main.temp+' ªC</li>'
+            output += '<li>Temperatura maxima: '+data.main.temp_max+' ºC</li>'
+            output += '<li>Temperatura minima: '+data.main.temp_min+'ºC</li>'
+            output += '<li>Descripcion: '+data.weather[0].description+'</li>'
+            output += '<li>Velocidad del viento: '+(data.wind.speed*1.6).toFixed(2)+' km/h</li>'
+            output += '<li>Amanecer: ' + hora_sunrise + ":" + minutos_sunrise + " hs GMT-0300 (ART) </li>"
+            output += '<li>Atardecer: '+ hora_sunset + ":" + minutos_sunset + " hs GMT-0300 (ART)</li>" 
+            output+= '</ul>'
+
+            $('#container').html(output)
+            $('#alert').text('')
+    }
+
+
+    $('button').click(function(){
+      $('#container').text('')
+      $('#alert').text('El request fue enviado, esperando data...')
+      $.get('http://api.openweathermap.org/data/2.5/weather?q='+ encodeURI(this.name) +'&appid=95176c8edea30e33338e0eaddd53a916&units=metric').success(traerData)
+    })
+
+    </script>
+</body>
+</html>
